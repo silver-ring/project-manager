@@ -1,6 +1,7 @@
 package com.pm.api.project
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -11,6 +12,7 @@ class ProjectApi @Autowired constructor(
 ) {
 
     @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
     fun createProject(@RequestBody createProjectRequest: CreateProjectRequest): CreateProjectResponse {
         return createProjectExecutor.execute(createProjectRequest)
     }
