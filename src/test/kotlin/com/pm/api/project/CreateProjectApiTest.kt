@@ -24,7 +24,7 @@ import java.util.*
 
 @SpringBootTest
 @AutoConfigureMockMvc
-internal class ProjectApiTest {
+internal class CreateProjectApiTest {
 
     @MockBean
     lateinit var projectsRepo: ProjectsRepo
@@ -35,10 +35,11 @@ internal class ProjectApiTest {
     @Autowired
     lateinit var mockMvc: MockMvc
 
+    val projectUrl = "/projects/"
+
     @Test
     fun createProject_success() {
 
-        val url = "/projects/"
         val createProjectRequest = CreateProjectRequest()
         createProjectRequest.ownerId = "12"
         createProjectRequest.projectName = "test"
@@ -64,7 +65,7 @@ internal class ProjectApiTest {
         `when`(projectsRepo.save(project)).thenReturn(newProject)
 
         val result = mockMvc.perform(
-            post(url)
+            post(projectUrl)
                 .contentType(APPLICATION_JSON)
                 .content(ObjectMapper().writeValueAsString(createProjectRequest))
         ).andExpect(status().isOk).andReturn().response.contentAsString
@@ -80,12 +81,11 @@ internal class ProjectApiTest {
 
     @Test
     fun createProject_missingOwnerId() {
-        val url = "/projects/"
         val createProjectRequest = CreateProjectRequest()
         createProjectRequest.ownerId = "test"
 
         val result = mockMvc.perform(
-            post(url)
+            post(projectUrl)
                 .contentType(APPLICATION_JSON)
                 .content(ObjectMapper().writeValueAsString(createProjectRequest))
         ).andExpect(status().isBadRequest).andReturn().response.contentAsString
@@ -100,12 +100,11 @@ internal class ProjectApiTest {
 
     @Test
     fun createProject_missingProjectName() {
-        val url = "/projects/"
         val createProjectRequest = CreateProjectRequest()
         createProjectRequest.projectName = "test"
 
         val result = mockMvc.perform(
-            post(url)
+            post(projectUrl)
                 .contentType(APPLICATION_JSON)
                 .content(ObjectMapper().writeValueAsString(createProjectRequest))
         ).andExpect(status().isBadRequest).andReturn().response.contentAsString
@@ -121,7 +120,6 @@ internal class ProjectApiTest {
     @Test
     fun createProject_employeeNotFound() {
 
-        val url = "/projects/"
         val createProjectRequest = CreateProjectRequest()
         createProjectRequest.ownerId = "12"
         createProjectRequest.projectName = "test"
@@ -157,7 +155,7 @@ internal class ProjectApiTest {
         `when`(employeesApiProxy.getEmployee(employee.id)).thenThrow(feignException)
 
         val result = mockMvc.perform(
-            post(url)
+            post(projectUrl)
                 .contentType(APPLICATION_JSON)
                 .content(ObjectMapper().writeValueAsString(createProjectRequest))
         ).andExpect(status().isNotFound).andReturn().response.contentAsString
@@ -175,7 +173,6 @@ internal class ProjectApiTest {
     @Test
     fun createProject_projectNameAlreadyExist() {
 
-        val url = "/projects/"
         val createProjectRequest = CreateProjectRequest()
         createProjectRequest.ownerId = "12"
         createProjectRequest.projectName = "test"
@@ -201,7 +198,7 @@ internal class ProjectApiTest {
         `when`(projectsRepo.findProjectByNameEquals(project.name!!)).thenReturn(Optional.of(project))
 
         val result = mockMvc.perform(
-            post(url)
+            post(projectUrl)
                 .contentType(APPLICATION_JSON)
                 .content(ObjectMapper().writeValueAsString(createProjectRequest))
         ).andExpect(status().isBadRequest).andReturn().response.contentAsString
