@@ -68,7 +68,7 @@ internal class CreateProjectApiTest {
             post(projectUrl)
                 .contentType(APPLICATION_JSON)
                 .content(ObjectMapper().writeValueAsString(createProjectRequest))
-        ).andExpect(status().isOk).andReturn().response.contentAsString
+        ).andExpect(status().isCreated).andReturn().response.contentAsString
 
         assertFalse(result.isEmpty())
         assertEquals("{\"id\":${projectId}}", result)
