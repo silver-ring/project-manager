@@ -16,6 +16,9 @@ Also you can run unit test using regular gradle
 gradlew test
 ```
 
+test report should be found at
+> build\reports\tests\test
+
 # Startup local environment
 
 The system is based on the following:

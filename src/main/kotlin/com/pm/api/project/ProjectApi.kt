@@ -1,5 +1,6 @@
 package com.pm.api.project
 
+import com.pm.api.NoRequestObject
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -8,7 +9,8 @@ import org.springframework.web.bind.annotation.*
 @ResponseBody
 @RequestMapping("/projects")
 class ProjectApi @Autowired constructor(
-    private val createProjectExecutor: CreateProjectExecutor
+    private val createProjectExecutor: CreateProjectExecutor,
+    private val getAllProjectsExecutor: GetAllProjectsExecutor
 ) {
 
     @PostMapping("/")
@@ -18,8 +20,8 @@ class ProjectApi @Autowired constructor(
     }
 
     @GetMapping("/")
-    fun getAllProjects() {
-        // TODO
+    fun getAllProjects(): GetAllProjectsResponse {
+        return getAllProjectsExecutor.execute(NoRequestObject())
     }
 
     @GetMapping("/{id}")

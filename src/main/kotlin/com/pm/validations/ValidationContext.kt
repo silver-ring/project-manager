@@ -1,9 +1,12 @@
 package com.pm.validations
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.util.*
 
-@Component
+@Component()
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class ValidationContext {
 
     var validations: Queue<Validation> = LinkedList()
