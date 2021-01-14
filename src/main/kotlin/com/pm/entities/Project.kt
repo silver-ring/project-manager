@@ -9,7 +9,7 @@ import javax.persistence.Id
 
 @Repository
 interface ProjectsRepo : JpaRepository<Project, Long> {
-    fun findProjectByNameEquals(projectName: String): Optional<Project>
+    fun existsProjectByName(projectName: String): Boolean
 }
 
 enum class ProjectState {

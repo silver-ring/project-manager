@@ -2,10 +2,21 @@ package com.pm.api.project
 
 import com.pm.api.ApiExecutor
 import com.pm.api.NoRequestObject
+import com.pm.api.ResponseObject
 import com.pm.entities.ProjectsRepo
 import com.pm.validations.ValidationContext
 import org.springframework.stereotype.Service
 import kotlin.streams.toList
+
+class GetAllProjectsResponse : ResponseObject {
+    var data = listOf<GetAllProjectsResponseData>()
+}
+
+class GetAllProjectsResponseData {
+    var projectId = 0L
+    var projectName = ""
+    var ownerId = ""
+}
 
 @Service
 class GetAllProjectsExecutor(

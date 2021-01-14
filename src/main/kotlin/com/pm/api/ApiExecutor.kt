@@ -6,10 +6,6 @@ interface RequestObject {
 
 }
 
-class NoResponseObject : ResponseObject {
-
-}
-
 interface ResponseObject {
 
 }

@@ -1,11 +1,22 @@
 package com.pm.api.project
 
 import com.pm.api.ApiExecutor
+import com.pm.api.RequestObject
+import com.pm.api.ResponseObject
 import com.pm.validations.*
 import com.pm.entities.Project
 import com.pm.entities.ProjectState
 import com.pm.entities.ProjectsRepo
 import org.springframework.stereotype.Service
+
+class CreateProjectRequest : RequestObject {
+    var projectName = ""
+    var ownerId = ""
+}
+
+class CreateProjectResponse : ResponseObject {
+    var id: Long = 0
+}
 
 @Service
 class CreateProjectExecutor(
@@ -21,8 +32,8 @@ class CreateProjectExecutor(
     }
 
     override fun validateRules(createProjectRequest: CreateProjectRequest): ValidationContext {
-        validationContext.addValidation(ProjectOwnerRoleValidation(employeesApiProxy, createProjectRequest.ownerId))
         validationContext.addValidation(ProjectNameExistValidation(projectsRepo, createProjectRequest.projectName))
+        validationContext.addValidation(ProjectOwnerRoleValidation(employeesApiProxy, createProjectRequest.ownerId))
         return validationContext
     }
 

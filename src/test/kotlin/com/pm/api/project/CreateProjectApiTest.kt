@@ -63,6 +63,7 @@ internal class CreateProjectApiTest {
         newProject.state = ProjectState.NOT_STARTED
         newProject.ownerId = createProjectRequest.ownerId
 
+        `when`(projectsRepo.existsProjectByName(project.name!!)).thenReturn(false)
         `when`(employeesApiProxy.getEmployee(employee.id)).thenReturn(employee)
         `when`(projectsRepo.save(project)).thenReturn(newProject)
 
@@ -79,7 +80,7 @@ internal class CreateProjectApiTest {
         verify(employeesApiProxy, times(1)).getEmployee(employee.id)
         verifyNoMoreInteractions(employeesApiProxy)
         verify(projectsRepo, times(1)).save(project)
-        verify(projectsRepo, times(1)).findProjectByNameEquals(project.name!!)
+        verify(projectsRepo, times(1)).existsProjectByName(project.name!!)
         verifyNoMoreInteractions(projectsRepo)
     }
 
@@ -155,6 +156,7 @@ internal class CreateProjectApiTest {
         val apiErrorResponseStr = jacksonObjectMapper()
             .writeValueAsString(apiErrorResponse)
 
+        `when`(projectsRepo.existsProjectByName(project.name!!)).thenReturn(false)
         `when`(feignException.contentUTF8()).thenReturn(apiErrorResponseStr)
         `when`(employeesApiProxy.getEmployee(employee.id)).thenThrow(feignException)
 
@@ -169,9 +171,10 @@ internal class CreateProjectApiTest {
             "{\"detail\":\"${apiErrorResponse.detail}\",\"status\":${apiErrorResponse.status},\"title\":\"${apiErrorResponse.title}\"}",
             result
         )
+        verify(projectsRepo, times(1)).existsProjectByName(project.name!!)
         verify(employeesApiProxy, times(1)).getEmployee(employee.id)
         verifyNoMoreInteractions(employeesApiProxy)
-        verifyNoInteractions(projectsRepo)
+        verifyNoMoreInteractions(projectsRepo)
     }
 
     @Test
@@ -199,7 +202,7 @@ internal class CreateProjectApiTest {
         newProject.ownerId = createProjectRequest.ownerId
 
         `when`(employeesApiProxy.getEmployee(employee.id)).thenReturn(employee)
-        `when`(projectsRepo.findProjectByNameEquals(project.name!!)).thenReturn(Optional.of(project))
+        `when`(projectsRepo.existsProjectByName(project.name!!)).thenReturn(true)
 
         val result = mockMvc.perform(
             post(projectUrl)
@@ -209,9 +212,8 @@ internal class CreateProjectApiTest {
 
         assertFalse(result.isEmpty())
         assertEquals("{\"detail\":\"Project name is already exist\",\"status\":400,\"title\":\"Bad Request\"}", result)
-        verify(projectsRepo, times(1)).findProjectByNameEquals(project.name!!)
+        verify(projectsRepo, times(1)).existsProjectByName(project.name!!)
         verifyNoMoreInteractions(projectsRepo)
     }
-
 
 }

@@ -17,7 +17,9 @@ import org.springframework.web.util.UriComponentsBuilder
 @RequestMapping("/projects")
 class ProjectApi @Autowired constructor(
     private val createProjectExecutor: CreateProjectExecutor,
-    private val getAllProjectsExecutor: GetAllProjectsExecutor
+    private val getAllProjectsExecutor: GetAllProjectsExecutor,
+    private val getProjectExecutor: GetProjectExecutor,
+    private val updateProjectExecutor: UpdateProjectExecutor,
 ) {
 
     @PostMapping("/")
@@ -40,13 +42,19 @@ class ProjectApi @Autowired constructor(
     }
 
     @GetMapping("/{id}")
-    fun getProject(@PathVariable id: String) {
-        // TODO
+    fun getProject(@PathVariable id: Long): GetProjectResponse {
+        val getProjectRequest = GetProjectRequest()
+        getProjectRequest.id = id
+        return getProjectExecutor.execute(getProjectRequest)
     }
 
     @PutMapping("/{id}")
-    fun updateProject(@PathVariable id: Long, @RequestBody updateProjectRequest: UpdateProjectRequest) {
-        // TODO
+    fun updateProject(
+        @PathVariable id: Long,
+        @RequestBody updateProjectRequest: UpdateProjectRequest
+    ): UpdateProjectResponse {
+        updateProjectRequest.id = id
+        return updateProjectExecutor.execute(updateProjectRequest)
     }
 
     @PatchMapping("/{id}")

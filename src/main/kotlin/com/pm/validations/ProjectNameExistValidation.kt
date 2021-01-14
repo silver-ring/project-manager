@@ -7,7 +7,7 @@ import com.pm.exception.ProjectNameExist
 class ProjectNameExistValidation(private val projectsRepo: ProjectsRepo, private val projectName: String) :
     Validation {
     override fun validate() {
-        if (projectsRepo.findProjectByNameEquals(projectName).isPresent) {
+        if (projectsRepo.existsProjectByName(projectName)) {
             throw ProjectNameExist()
         }
     }
