@@ -14,6 +14,10 @@ class NoRequestObject : RequestObject {
 
 }
 
+class NoResponseObject : ResponseObject {
+
+}
+
 abstract class ApiExecutor<ReqObj:RequestObject, ResObj:ResponseObject> {
 
     fun execute(requestObject: ReqObj): ResObj {

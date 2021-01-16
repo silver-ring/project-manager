@@ -3,6 +3,7 @@ package com.pm.entities
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.*
+import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -10,6 +11,7 @@ import javax.persistence.Id
 @Repository
 interface ProjectsRepo : JpaRepository<Project, Long> {
     fun existsProjectByName(projectName: String): Boolean
+    fun getByName(projectName: String): Project
 }
 
 enum class ProjectState {
@@ -30,6 +32,8 @@ class Project {
     var name: String? = null
     var ownerId: String? = null
     var state: ProjectState? = null
+    @ElementCollection
+    var assignedEmployees = listOf<String>()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

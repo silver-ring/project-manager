@@ -20,9 +20,11 @@ class ProjectApi @Autowired constructor(
     private val getAllProjectsExecutor: GetAllProjectsExecutor,
     private val getProjectExecutor: GetProjectExecutor,
     private val updateProjectExecutor: UpdateProjectExecutor,
+    private val assignParticipantExecutor: AssignParticipantExecutor,
+    private val deleteProjectExecutor: DeleteProjectExecutor
 ) {
 
-    @PostMapping("/")
+    @PostMapping
     fun createProject(@RequestBody createProjectRequest: CreateProjectRequest): ResponseEntity<CreateProjectResponse> {
         val result = createProjectExecutor.execute(createProjectRequest)
 
@@ -36,7 +38,7 @@ class ProjectApi @Autowired constructor(
             .body(result)
     }
 
-    @GetMapping("/")
+    @GetMapping
     fun getAllProjects(): GetAllProjectsResponse {
         return getAllProjectsExecutor.execute(NoRequestObject())
     }
@@ -58,8 +60,21 @@ class ProjectApi @Autowired constructor(
     }
 
     @PatchMapping("/{id}")
-    fun assignParticipant(@PathVariable id: Long, @RequestBody assignParticipantRequest: AssignParticipantRequest) {
-        // TODO
+    fun assignParticipant(
+        @PathVariable id: Long,
+        @RequestBody assignParticipantRequest: AssignParticipantRequest
+    ): AssignParticipantResponse {
+        return assignParticipantExecutor.execute(assignParticipantRequest)
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun assignParticipant(
+        @PathVariable id: Long
+    ) {
+        val deleteProjectRequest = DeleteProjectRequest()
+        deleteProjectRequest.id
+        deleteProjectExecutor.execute(deleteProjectRequest)
     }
 
 }

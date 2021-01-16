@@ -40,7 +40,7 @@ class UpdateProjectExecutor(
 
     override fun validateRules(requestObject: UpdateProjectRequest): ValidationContext {
         validationContext.addValidation(ProjectExistValidation(projectsRepo, requestObject.id))
-        validationContext.addValidation(ProjectNameExistValidation(projectsRepo, requestObject.projectName))
+        validationContext.addValidation(ProjectNameDuplicationValidation(projectsRepo, requestObject.id, requestObject.projectName))
         validationContext.addValidation(ProjectOwnerRoleValidation(employeesApiProxy, requestObject.ownerId))
         return validationContext
     }

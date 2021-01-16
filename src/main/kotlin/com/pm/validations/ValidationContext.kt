@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.util.*
 
-@Component()
+@Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class ValidationContext {
 
